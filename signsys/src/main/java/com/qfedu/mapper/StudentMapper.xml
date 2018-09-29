@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.StudentDao">
+	<resultMap id="studentMap" type="Student">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="account" jdbcType="VARCHAR" property="account" />
+		<result column="realname" jdbcType="VARCHAR"
+			property="realname" />
+		<result column="password" jdbcType="VARCHAR"
+			property="password" />
+		<result column="stuid" jdbcType="VARCHAR" property="stuid" />
+	</resultMap>
+
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from t_student where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<insert id="addStudent" parameterType="Student">
+		insert into t_student
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				account,
+			</if>
+			<if test="realname != null">
+				realname,
+			</if>
+			<if test="password != null">
+				password,
+			</if>
+			<if test="stuid != null">
+				stuid,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null">
+				#{account},
+			</if>
+			<if test="realname != null">
+				#{realname},
+			</if>
+			<if test="password != null">
+				#{password},
+			</if>
+			<if test="stuid != null">
+				#{stuid},
+			</if>
+		</trim>
+	</insert>
+	<update id="update" parameterType="Student">
+		update t_student
+		<set>
+			<if test="account != null">
+				account = #{account,jdbcType=VARCHAR},
+			</if>
+			<if test="realname != null">
+				realname = #{realname,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				password = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="stuid != null">
+				stuid = #{stuid,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="findStudentByAccount" parameterType="string" resultType="Student">
+		select * from t_student where account=#{account}
+	</select>
+	
+	<select id="findStudentByStuId" parameterType="string" resultType="Student">
+		select * from t_student where stuid=#{stuid}
+	</select>
+	
+	<select id="query" parameterType="int">
+		select * from t_student where id=#{id}
+	</select>
+	
+</mapper>

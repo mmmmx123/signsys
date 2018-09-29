@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+<form onsubmit="return false;">
+
+	请输入您的学生ID<input type="text" name="stuid"><br />
+	<input type="submit" value="找回密码">
+	
+	
+</form>
+<script type="text/javascript">
+	$("form").submit(function() {
+		$.ajax({
+			type:"get",
+			url:"forget",
+			data:$("form").serialize(),
+			dataType:"json",
+			success:function(data) {
+				if (data.code == 1) {
+					alert("您的密码是" + data.msg);
+					window.location.href="login.html";
+				} else {
+					alert(data.msg);
+				}
+			}
+		})
+	})
+</script>
+</body>
+</html>

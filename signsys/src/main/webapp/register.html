@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+
+<form onsubmit="return false;">
+
+	账号<input type="text" name="account"><br />
+	密码<input type="password" name="password"><br />
+	真实姓名<input type="text" name="realname"><br />
+	学生ID<input type="text" name="stuid"><br />
+	<input type="submit" value="注册">
+	
+	
+</form>
+<script type="text/javascript">
+	$("form").submit(function() {
+		$.ajax({
+			type:"get",
+			url:"register",
+			data:$("form").serialize(),
+			dataType:"json",
+			success:function(data) {
+				if (data.code == 1) {
+					alert("注册成功");
+					window.location.href="login.html";
+				} else {
+					alert(data.msg);
+				}
+			}
+		})
+	})
+</script>
+</body>
+</html>

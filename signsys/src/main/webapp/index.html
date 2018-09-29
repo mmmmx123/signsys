@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<title>所有员工信息</title>
+		<style type="text/css">
+			table td {
+				text-align: center;
+			}
+			/*合并表格的边框*/
+			
+			table {
+				width: 700px;
+				border-collapse: collapse;
+			}
+			
+			h3 {
+				text-align: center;
+			}
+			
+			div {
+				margin: 0 auto;
+				width: 700px;
+			}
+		</style>
+		<!-- 引入jquery库 -->
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		
+	</head>
+
+	<body>
+		<div>
+			<h3>所有员工信息</h3>
+			<a href="javascript:sign()">签到</a>
+			<a href="#">关于</a><br/>
+			<table border="1">
+
+				<tr>
+					<th>序号</th>
+					<th>姓名</th>
+					<th>早上签到时间</th>
+					<th>早上签到状态</th>
+					<th>晚上签到时间</th>
+					<th>晚上签到状态</th>
+					<th>操作</th>
+				</tr>
+				
+				<tbody id="tid">
+				
+				</tbody>
+
+			</table>
+		</div>
+		
+		<script type="text/javascript">
+			$(function(){
+				// 通过ajax请求，获取第一页的数据
+				page_info(1);
+			})
+		
+		</script>
+		
+		<script type="text/javascript">
+			function page_info(page){
+				$.ajax({
+					type:"get",
+					url:"sign/page/" + page,
+					dataType:"json",
+					success:function(data){
+						if(data.code == 1){
+							var infos = data.msg.pageInfos;
+							// 先清除原来的数据
+							$("#tid").empty();
+							$(infos).each(function(){
+								var html = "<tr>";
+								html += "	<td>" + this.id + "</td>";
+								html += "	<td>" + this.name + "</td>";
+								html += "	<td>" + this.morningsigntime + "</td>";
+								html += "	<td>" + this.morningsign + "</td>";
+								html += "	<td>" + this.eveningsigntime + "</td>";
+								html += "	<td>" + this.eveningsign + "</td>";
+								html += "	<td><a href='update.html?id=" + this.id + "'>修改资料&nbsp;</a><a href='javascript:deleteInfo(" + this.id + ")'>删除</a></td>";
+								html += "</tr>";
+								// 添加元素
+								$("#tid").append($(html));
+							})
+							var html = "<tr>";
+							html += "<td colspan='6'>";
+							// 点击超链接，执行js的函数
+							html += "<a href='javascript:page_info(1)'>首页</a>";
+							var pre = data.msg.currentPage - 1;
+							if(pre <= 0){
+								html += "上一页";
+							}else{
+								html += "<a href='javascript:page_info(" + pre + ")'>上一页</a>";
+							}
+							var next = data.msg.currentPage + 1;
+							if(next > data.msg.totalPage){
+								
+								html += "下一页";
+							}else{
+								html += "<a href='javascript:page_info(" + next + ")'>下一页</a>";
+							}
+							html += "<a href='javascript:page_info(" + data.msg.totalPage + ")'>末页</a>";
+							html += data.msg.currentPage + "/" + data.msg.totalPage;
+							html += "</td>";
+							html += "<td>";
+							html += "</td>";
+							html += "</tr>";
+							$("#tid").append($(html));
+					
+							
+						}else{
+							alert(data.msg);
+						}
+					}
+				})
+			}
+		
+		</script>
+		
+		<script type="text/javascript">
+			function deleteInfo(id){
+				$.ajax({
+					type:"get",
+					url:"delete?id=" + id,
+					dataType:"json",
+					success:function(data){
+						if(data.code == 1){
+							page_info(1);
+						}else{
+							alert(data.msg);
+						}
+					}
+				})
+			}
+		</script>
+
+<script type="text/javascript">
+	function sign() {
+		$.ajax({
+			type:"get",
+			url:"sign",
+			dataType:"json",
+			success:function(data) {
+				if (data.code == 1) {
+					alert("签到成功");
+					window.location.href="index.html";
+				} else {
+					alert(data.msg);
+				}
+			}
+		})
+	}
+</script>
+	</body>
+
+</html>

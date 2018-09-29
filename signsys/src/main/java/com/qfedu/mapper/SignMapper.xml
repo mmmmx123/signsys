@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.SignDao">
+	<resultMap id="signMap" type="Sign">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="morningsign" jdbcType="VARCHAR"
+			property="morningsign" />
+		<result column="eveningsign" jdbcType="VARCHAR"
+			property="eveningsign" />
+		<result column="morningsigntime" jdbcType="DATE"
+			property="morningsigntime" />
+		<result column="eveningsigntime" jdbcType="DATE"
+			property="eveningsigntime" />
+	</resultMap>
+
+	<delete id="delete" parameterType="int">
+		delete from t_sign where id = #{id}
+	</delete>
+
+	<insert id="addSign" parameterType="Sign">
+		insert into t_sign
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				name,
+			</if>
+			<if test="morningsign != null">
+				morningsign,
+			</if>
+			<if test="eveningsign != null">
+				eveningsign,
+			</if>
+			<if test="morningsigntime != null">
+				morningsigntime,
+			</if>
+			<if test="eveningsigntime != null">
+				eveningsigntime,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="name != null">
+				#{name},
+			</if>
+			<if test="morningsign != null">
+				#{morningsign},
+			</if>
+			<if test="eveningsign != null">
+				#{eveningsign},
+			</if>
+			<if test="morningsigntime != null">
+				#{morningsigntime},
+			</if>
+			<if test="eveningsigntime != null">
+				#{eveningsigntime},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateSign" parameterType="Sign">
+		update t_sign
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="morningsign != null">
+				morningsign = #{morningsign},
+			</if>
+			<if test="eveningsign != null">
+				eveningsign = #{eveningsign},
+			</if>
+			<if test="morningsigntime != null">
+				morningsigntime = #{morningsigntimeE},
+			</if>
+			<if test="eveningsigntime != null">
+				eveningsigntime = #{eveningsigntime},
+			</if>
+		</set>
+		where id = #{id}
+	</update>
+
+	<select id="findByIndexAndSize" parameterType="map"
+		resultType="Sign">
+		select * from t_sign limit #{index},#{size}
+	</select>
+
+	<select id="count" resultType="int">
+		select count(1) from t_sign
+	</select>
+	
+	<select id="findSignByDate" parameterType="string">
+	select * from t_sign where morningsigntime like '%${date}%'
+	</select>
+</mapper>
